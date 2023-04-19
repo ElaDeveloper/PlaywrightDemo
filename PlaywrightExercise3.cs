@@ -1,8 +1,9 @@
-using Microsoft.Playwright;
+﻿using Microsoft.Playwright;
+using PlaywrightDemo.PageObjModel;
 
 namespace PlaywrightDemo;
 
-public class Test1
+public class Test3
 {
     [SetUp]
     public void Setup()
@@ -19,11 +20,11 @@ public class Test1
         });
         var page = await browser.NewPageAsync();
         await page.GotoAsync("http://eaapp.somee.com/");
-        await page.ClickAsync(selector: "text=Login");
-        await page.FillAsync(selector: "#UserName", "admin");
-        await page.FillAsync(selector: "#Password", "admin");
-        await page.ClickAsync(selector: "text=Log in");
-        var isExist = await page.Locator(selector: "text=Employee Details").IsVisibleAsync();
+        LoginPageUpgraded loginPage = new LoginPageUpgraded(page);
+        await loginPage.ClickLogin();
+        await loginPage.Login("admin", "password");
+        await loginPage.ClickEnter();
+        var isExist = await loginPage.IsEmployeeDetailsExists();
         Assert.IsTrue(isExist);
     }
 }
